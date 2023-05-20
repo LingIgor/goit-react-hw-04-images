@@ -26,11 +26,6 @@ export const App = () => {
 
   const onBtnClickPg = () => {
     setPage(page + 1);
-
-    // this.setState(({ page }) => ({
-    //   page: page + 1,
-    // }));
-    // console.log(this.state.images)
   };
 
   const onSubmit = value => {
@@ -42,10 +37,10 @@ export const App = () => {
   return (
     <>
       <Searchbar onSubmit={onSubmit} />
-      {status === 'idle' && <div>Введіть значення</div>}
+      {stat === 'idle' && <div>Введіть значення</div>}
       {isloader && <Loader />}
-      {status === 'resolved' && <ImageGallery images={images} />}
-      {status === 'rejected' && <h1>{error.message}</h1>}
+      {stat === 'resolved' && <ImageGallery images={images} />}
+      {stat === 'rejected' && <h1>{error.message}</h1>}
 
       {images.length !== 0 && images.length / 12 === page && (
         <Button onClick={onBtnClickPg} />
