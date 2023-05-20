@@ -1,19 +1,4 @@
-const stat = {
-  IDLE: 'idle',
-  PENDING: 'pending',
-  RESOLVED: 'resolved',
-  REJECTED: 'rejected',
-};
-
 export const App = () => {
-  const [status, setStatus] = useState('idle');
-  const [images, setImages] = useState([]);
-  const [query, setQuery] = useState('');
-  const [page, setPage] = useState(1);
-  const [per_page, setPer_page] = useState(12);
-  const [error, setError] = useState(null);
-  const [isloader, setIsLoader] = useState(false);
-
   useEffect(() => {
     if (query === '') return;
     console.log('use');
