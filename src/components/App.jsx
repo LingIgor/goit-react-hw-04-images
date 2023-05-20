@@ -49,17 +49,6 @@ export const App = () => {
     fetchFn();
   }, [page, query]);
 
-  // componentDidUpdate(prevProps, prevState) {
-  //   const { query, page } = this.state;
-  //   if (prevState.query !== query || prevState.page !== page) {
-  //     this.setState({
-  //       isLoader: true,
-  //     });
-
-  //     this.fetchFn();
-  //   }
-  // }
-
   const onBtnClickPg = () => {
     setPage(page + 1);
   };
