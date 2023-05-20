@@ -24,7 +24,7 @@ export const App = () => {
     prev => {
       if (prev !== query) {
         setIsLoader(true);
-        fetchFn();
+        // fetchFn();
       }
     },
     [page, query]
@@ -41,25 +41,28 @@ export const App = () => {
   //   }
   // }
 
-  const fetchFn = () => {
+  const fetchFn = async () => {
     const per_page = 12;
     const BASE_URL = 'https://pixabay.com/api/';
     const API_KEY = '34770322-1d785185ad6fb3686a5689e8d';
     const ALL_URL = `${BASE_URL}?q=${query}&page=${page}&key=${API_KEY}&image_type=photo&orientation=horizontal&per_page=${per_page}`;
 
-    fetch(ALL_URL)
-      .then(res => res.json())
-      .then(({ hits }) => {
+    try {
+      try {
+        const res = await fetch(ALL_URL);
+        const { hits } = await res.json();
         setImages([...images, ...hits]);
         setIsLoader(false);
-      })
-      .catch(error => {
+      } catch (error) {
         setError(error);
         setStatus(stat.REJECTED);
-      })
-
-      .finally(() => setStatus(stat.RESOLVED));
+      }
+    } finally {
+      return setStatus(stat.RESOLVED);
+    }
   };
+
+  fetchFn();
 
   const onBtnClickPg = () => {
     setPage(page + 1);
