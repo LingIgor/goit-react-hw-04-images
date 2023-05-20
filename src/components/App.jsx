@@ -20,34 +20,49 @@ export const App = () => {
   const [error, setError] = useState(null);
   const [isLoader, setIsLoader] = useState(false);
 
-  useEffect(() => {
-    if (!query) {
-      return;
-    }
-
-    setIsLoader(true);
-    async function fetchFn() {
-      const per_page = 12;
-      const BASE_URL = 'https://pixabay.com/api/';
-      const API_KEY = '34770322-1d785185ad6fb3686a5689e8d';
-      const ALL_URL = `${BASE_URL}?q=${query}&page=${page}&key=${API_KEY}&image_type=photo&orientation=horizontal&per_page=${per_page}`;
-
-      try {
-        try {
-          const res = await fetch(ALL_URL);
-          const { hits } = await res.json();
-          setImages([...images, ...hits]);
-          setIsLoader(false);
-        } catch (error) {
-          setError(error);
-          setStatus(stat.REJECTED);
-        }
-      } finally {
-        return setStatus(stat.RESOLVED);
+  useEffect(
+    prev => {
+      if (prev !== query) {
+        setIsLoader(true);
+        fetchFn();
       }
+    },
+    [page, query]
+  );
+
+  // componentDidUpdate(prevProps, prevState) {
+  //   const { query, page } = this.state;
+  //   if (prevState.query !== query || prevState.page !== page) {
+  //     this.setState({
+  //       isLoader: true,
+  //     });
+
+  //     this.fetchFn();
+  //   }
+  // }
+
+  const fetchFn = async () => {
+    const per_page = 12;
+    const BASE_URL = 'https://pixabay.com/api/';
+    const API_KEY = '34770322-1d785185ad6fb3686a5689e8d';
+    const ALL_URL = `${BASE_URL}?q=${query}&page=${page}&key=${API_KEY}&image_type=photo&orientation=horizontal&per_page=${per_page}`;
+
+    try {
+      try {
+        const res = await fetch(ALL_URL);
+        const { hits } = await res.json();
+        setImages([...images, ...hits]);
+        setIsLoader(false);
+      } catch (error) {
+        setError(error);
+        setStatus(stat.REJECTED);
+      }
+    } finally {
+      return setStatus(stat.RESOLVED);
     }
-    fetchFn();
-  }, [page, query]);
+  };
+
+  fetchFn();
 
   const onBtnClickPg = () => {
     setPage(page + 1);
