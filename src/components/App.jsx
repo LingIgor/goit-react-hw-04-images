@@ -24,7 +24,7 @@ export const App = () => {
     prev => {
       if (prev !== query) {
         setIsLoader(true);
-        fetchFn();
+        // fetchFn();
       }
     },
     [page, query]
