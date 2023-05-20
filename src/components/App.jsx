@@ -41,7 +41,7 @@ export const App = () => {
   //   }
   // }
 
-  const fetchFn = async () => {
+  async function fetchFn() {
     const per_page = 12;
     const BASE_URL = 'https://pixabay.com/api/';
     const API_KEY = '34770322-1d785185ad6fb3686a5689e8d';
@@ -60,7 +60,7 @@ export const App = () => {
     } finally {
       return setStatus(stat.RESOLVED);
     }
-  };
+  }
 
   fetchFn();
 
