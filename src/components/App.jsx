@@ -27,15 +27,14 @@ export const App = () => {
     }
     setIsLoader(true);
     Api.fetchFn(page, query)
-      .then(({ hits }) => {
-        setImages([...images, ...hits]);
-        setIsLoader(false);
-      })
+      .then(({ hits }) => setImages(prevState => [...prevState, ...hits]))
       .catch(error => {
         setError(error);
         setStatus(stat.REJECTED);
       });
-  }, [page, query, images]);
+
+    setIsLoader(false);
+  }, [page, query]);
 
   // componentDidUpdate(prevProps, prevState) {
   //   const { query, page } = this.state;
