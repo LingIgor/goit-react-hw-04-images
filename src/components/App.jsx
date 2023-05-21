@@ -1,5 +1,6 @@
 // import axios from 'axios';
 import React, { useState, useEffect } from 'react';
+import Api from '../components/API/API';
 import { Searchbar } from './Searchbar/Searchbar';
 import { ImageGallery } from './ImageGallery/ImageGallery';
 import { Button } from './Button/Button';
@@ -25,29 +26,16 @@ export const App = () => {
       return;
     }
     setIsLoader(true);
-    fetchFn();
-  }, [page, query]);
-
-  async function fetchFn() {
-    const per_page = 12;
-    const BASE_URL = 'https://pixabay.com/api/';
-    const API_KEY = '34770322-1d785185ad6fb3686a5689e8d';
-    const ALL_URL = `${BASE_URL}?q=${query}&page=${page}&key=${API_KEY}&image_type=photo&orientation=horizontal&per_page=${per_page}`;
-
-    try {
-      try {
-        const res = await fetch(ALL_URL);
-        const { hits } = await res.json();
+    Api.fetchFn(page, query)
+      .then(({ hits }) => {
         setImages([...images, ...hits]);
         setIsLoader(false);
-      } catch (error) {
+      })
+      .catch(error => {
         setError(error);
         setStatus(stat.REJECTED);
-      }
-    } finally {
-      return setStatus(stat.RESOLVED);
-    }
-  }
+      });
+  }, [page, query, images]);
 
   // componentDidUpdate(prevProps, prevState) {
   //   const { query, page } = this.state;
