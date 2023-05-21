@@ -20,26 +20,13 @@ export const App = () => {
   const [error, setError] = useState(null);
   const [isLoader, setIsLoader] = useState(false);
 
-  useEffect(
-    prev => {
-      if (prev !== query) {
-        setIsLoader(true);
-        fetchFn();
-      }
-    },
-    [page, query]
-  );
-
-  // componentDidUpdate(prevProps, prevState) {
-  //   const { query, page } = this.state;
-  //   if (prevState.query !== query || prevState.page !== page) {
-  //     this.setState({
-  //       isLoader: true,
-  //     });
-
-  //     this.fetchFn();
-  //   }
-  // }
+  useEffect(() => {
+    if (!query) {
+      return;
+    }
+    setIsLoader(true);
+    fetchFn();
+  }, [page, query]);
 
   async function fetchFn() {
     const per_page = 12;
@@ -62,7 +49,16 @@ export const App = () => {
     }
   }
 
-  fetchFn();
+  // componentDidUpdate(prevProps, prevState) {
+  //   const { query, page } = this.state;
+  //   if (prevState.query !== query || prevState.page !== page) {
+  //     this.setState({
+  //       isLoader: true,
+  //     });
+
+  //     this.fetchFn();
+  //   }
+  // }
 
   const onBtnClickPg = () => {
     setPage(page + 1);
