@@ -21,20 +21,41 @@ export const App = () => {
   const [error, setError] = useState(null);
   const [isLoader, setIsLoader] = useState(false);
 
+  // useEffect(() => {
+  //   if (!query) {
+  //     return;
+  //   }
+  //   setIsLoader(true);
+  //   Api.fetchFn(page, query)
+  //     .then(({ hits }) => setImages(prevState => [...prevState, ...hits]))
+  //     .catch(error => {
+  //       setError(error);
+  //       setStatus(stat.REJECTED);
+  //     });
+
+  //   setIsLoader(false);
+  // }, [page, query]);
+
   useEffect(() => {
     if (!query) {
       return;
     }
-    setIsLoader(true);
-    Api.fetchFn(page, query)
-      .then(({ hits }) => setImages(prevState => [...prevState, ...hits]))
-      .catch(error => {
-        setError(error);
-        setStatus(stat.REJECTED);
-      });
 
+    const renderImages = () => {
+      setStatus(stat.PENDING);
+      setIsLoader(true);
+      Api.fetchFn(query, page)
+        .then(data => setImages(prevState => [...prevState, ...data.hits]))
+        .catch(error => {
+          setError(error);
+          setStatus(stat.REJECTED);
+        })
+        .finally(() => setStatus(stat.RESOLVED));
+    };
     setIsLoader(false);
-  }, [page, query]);
+    renderImages();
+    // scroll.scrollToBottom();
+  }, [query, page]);
 
   // componentDidUpdate(prevProps, prevState) {
   //   const { query, page } = this.state;
