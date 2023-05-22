@@ -1,6 +1,5 @@
 // import axios from 'axios';
 import React, { useState, useEffect } from 'react';
-
 import { Searchbar } from './Searchbar/Searchbar';
 import { ImageGallery } from './ImageGallery/ImageGallery';
 import { Button } from './Button/Button';
@@ -12,6 +11,8 @@ const stat = {
   RESOLVED: 'resolved',
   REJECTED: 'rejected',
 };
+
+const per_page = 12;
 
 export const App = () => {
   const [status, setStatus] = useState(stat.IDLE);
@@ -27,25 +28,22 @@ export const App = () => {
 
     const fetchFn = () => {
       setStatus(stat.PENDING);
-       const per_page = 12
       const BASE_URL = 'https://pixabay.com/api/';
       const API_KEY = '34770322-1d785185ad6fb3686a5689e8d';
       const ALL_URL = `${BASE_URL}?q=${query}&page=${page}&key=${API_KEY}&image_type=photo&orientation=horizontal&per_page=${per_page}`;
-      
+
       fetch(ALL_URL)
         .then(res => res.json())
-        .then(({ hits }) =>
-          setImages( images  => [...images, ...hits]))          
+        .then(({ hits }) => setImages(images => [...images, ...hits]))
         .catch(error => {
-          setError(error)
-        setStatus(stat.REJECTED)})
-        .finally(() => setStatus(stat.RESOLVED ));
+          setError(error);
+          setStatus(stat.REJECTED);
+        })
+        .finally(() => setStatus(stat.RESOLVED));
     };
-    
-    fetchFn ()   
+
+    fetchFn();
   }, [query, page]);
-
-
 
   const onBtnClickPg = () => {
     setPage(page + 1);
@@ -60,11 +58,13 @@ export const App = () => {
   return (
     <>
       <Searchbar onSubmit={onSubmit} />
-      {status === 'idle' && <div>Введіть значення</div>}
-      {status === stat.PENDING && (<Loader/>)}
-      {status === 'resolved' && <ImageGallery images={images} />}
-      {status === 'rejected' && <h1>{error.message}</h1>}
-      {images.length !== 0 && <Button onClick={onBtnClickPg} />}
+      {status === stat.IDLE && <div>Введіть значення</div>}
+      {status === stat.PENDING && <Loader />}
+      {status === stat.RESOLVED && <ImageGallery images={images} />}
+      {status === stat.REJECTED && <h1>{error.message}</h1>}
+      {images.length !== 0 && images.length / per_page === page && (
+        <Button onClick={onBtnClickPg} />
+      )}
     </>
   );
 };
