@@ -1,9 +1,7 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
-
-
-export const ImageGallerys = styled.ul `
-display: grid;
+export const ImageGallerys = styled.ul`
+  display: grid;
   max-width: calc(100vw - 48px);
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   grid-gap: 16px;
@@ -13,5 +11,4 @@ display: grid;
   list-style: none;
   margin-left: auto;
   margin-right: auto;
-
-`
+`;
